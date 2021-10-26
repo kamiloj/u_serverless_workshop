@@ -20,3 +20,29 @@ pipeline.addStage(StageOptions.builder()
         .stageName("Source")
         .actions(Collections.singletonList(codeCommitSource))
         .build());
+
+
+// Declare build output as artifacts
+Artifact buildOutput = new Artifact("buildOutput");
+
+// Declare a new CodeBuild project
+PipelineProject buildProject = new PipelineProject(this, "Build", PipelineProjectProps.builder()
+        .environment(BuildEnvironment.builder()
+                .buildImage(AMAZON_LINUX_2).build())
+        .environmentVariables(Collections.singletonMap("PACKAGE_BUCKET", BuildEnvironmentVariable.builder()
+                .value(artifactsBucket.getBucketName())
+                .build()))
+        .build());
+
+// Add the build stage to our pipeline
+CodeBuildAction buildAction = new CodeBuildAction(CodeBuildActionProps.builder()
+        .actionName("Build")
+        .project(buildProject)
+        .input(sourceOutput)
+        .outputs(Collections.singletonList(buildOutput))
+        .build());
+
+pipeline.addStage(StageOptions.builder()
+        .stageName("Build")
+        .actions(Collections.singletonList(buildAction))
+        .build());
