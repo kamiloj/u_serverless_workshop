@@ -1,0 +1,22 @@
+import software.amazon.awscdk.services.codebuild.*;
+import software.amazon.awscdk.services.codecommit.*;
+import software.amazon.awscdk.services.codepipeline.*;
+import software.amazon.awscdk.services.codepipeline.actions.*;
+import java.util.*;
+import static software.amazon.awscdk.services.codebuild.LinuxBuildImage.AMAZON_LINUX_2;
+
+
+
+
+
+
+CodeCommitSourceAction codeCommitSource = new CodeCommitSourceAction(CodeCommitSourceActionProps.builder()
+        .actionName("CodeCommit_Source")
+        .repository(codeRepo)
+        .output(sourceOutput)
+        .build());
+
+pipeline.addStage(StageOptions.builder()
+        .stageName("Source")
+        .actions(Collections.singletonList(codeCommitSource))
+        .build());
