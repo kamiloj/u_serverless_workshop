@@ -9,6 +9,12 @@ import static software.amazon.awscdk.services.codebuild.LinuxBuildImage.AMAZON_L
 
 
 
+IRepository codeRepo = Repository.fromRepositoryName(this, "AppRepository", "sam-app");
+Pipeline pipeline = new Pipeline(this, "Pipeline", PipelineProps.builder()
+        .artifactBucket(artifactsBucket).build());
+Artifact sourceOutput = new Artifact("sourceOutput");
+
+
 
 CodeCommitSourceAction codeCommitSource = new CodeCommitSourceAction(CodeCommitSourceActionProps.builder()
         .actionName("CodeCommit_Source")
