@@ -1,1 +1,1 @@
-# javeriana_workshop
+# Serverless Workshop
